@@ -22,11 +22,11 @@ jobs:
         with:
           flutter-version: '3.16.0'
 
+      - name: 🔹 Accept Android Licenses
+        run: yes | flutter doctor --android-licenses
+
       - name: 🔹 Check Flutter Environment
         run: flutter doctor
-
-      - name: 🔹 Change to Flutter project directory
-        run: cd my_app
 
       - name: 🔹 Install dependencies
         run: flutter pub get
@@ -37,14 +37,14 @@ jobs:
         working-directory: my_app
 
       - name: 🔹 Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
         working-directory: my_app
 
-      - name: 🔹 Check if APK exists
-        run: ls -al my_flutter_project/build/app/outputs/flutter-apk/
+      - name: 🔹 Find APK location
+        run: find my_app/build -name "*.apk"
 
       - name: 🔹 Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
-          path: my_flutter_project/build/app/outputs/flutter-apk/app-release.apk
+          path: my_app/build/app/outputs/flutter-apk/app-release.apk
