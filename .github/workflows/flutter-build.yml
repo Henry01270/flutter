@@ -3,7 +3,7 @@ name: Flutter APK Build
 on:
   push:
     branches:
-      - main  # main 브랜치에 push할 때 실행
+      - main
   pull_request:
     branches:
       - main
@@ -11,30 +11,40 @@ on:
 jobs:
   build:
     name: Build Flutter APK
-    runs-on: ubuntu-latest  # Ubuntu 환경에서 실행
+    runs-on: ubuntu-latest
 
     steps:
       - name: 🔹 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: 🔹 Change to Flutter project directory
-        run: cd my_app
-      
       - name: 🔹 Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.0'
 
+      - name: 🔹 Check Flutter Environment
+        run: flutter doctor
+
+      - name: 🔹 Change to Flutter project directory
+        run: cd my_app
+
       - name: 🔹 Install dependencies
         run: flutter pub get
+        working-directory: my_app
+
+      - name: 🔹 Clean project (Fix Gradle issues)
+        run: flutter clean
         working-directory: my_app
 
       - name: 🔹 Build APK
         run: flutter build apk --release
         working-directory: my_app
 
+      - name: 🔹 Check if APK exists
+        run: ls -al my_flutter_project/build/app/outputs/flutter-apk/
+
       - name: 🔹 Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: flutter-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: my_flutter_project/build/app/outputs/flutter-apk/app-release.apk
