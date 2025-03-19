@@ -1,4 +1,4 @@
-name: Flutter APK Build
+name: Flutter iOS Build
 
 on:
   push:
@@ -10,8 +10,8 @@ on:
 
 jobs:
   build:
-    name: Build Flutter APK
-    runs-on: ubuntu-latest
+    name: Build Flutter iOS
+    runs-on: macos-latest
 
     steps:
       - name: 🔹 Checkout Repository
@@ -22,8 +22,11 @@ jobs:
         with:
           flutter-version: '3.16.0'
 
-      - name: 🔹 Accept Android Licenses
-        run: yes | flutter doctor --android-licenses
+      - name: 🔹 Install Xcode dependencies
+        run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+
+      - name: 🔹 Accept Android Licenses (Optional)
+        run: yes | flutter doctor --android-licenses || true
 
       - name: 🔹 Check Flutter Environment
         run: flutter doctor
@@ -32,19 +35,19 @@ jobs:
         run: flutter pub get
         working-directory: my_app
 
-      - name: 🔹 Clean project (Fix Gradle issues)
+      - name: 🔹 Clean project
         run: flutter clean
         working-directory: my_app
 
-      - name: 🔹 Build APK
-        run: flutter build apk --release --verbose
+      - name: 🔹 Build iOS app
+        run: flutter build ios --release --no-codesign
         working-directory: my_app
 
-      - name: 🔹 Find APK location
-        run: find my_app/build -name "*.apk"
+      - name: 🔹 Find IPA location
+        run: find my_app/build/ios -name "*.app"
 
-      - name: 🔹 Upload APK artifact
+      - name: 🔹 Upload iOS Artifact (App Bundle)
         uses: actions/upload-artifact@v4
         with:
-          name: flutter-apk
-          path: my_app/build/app/outputs/flutter-apk/app-release.apk
+          name: flutter-ios-app
+          path: my_app/build/ios/iphoneos/*.app
