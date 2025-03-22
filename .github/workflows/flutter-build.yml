@@ -1,30 +1,17 @@
-<<<<<<< HEAD
-name: Flutter APK Build
-=======
 name: Flutter iOS Build
->>>>>>> c0c3502c2ab305c1012e5b9d97f61c557d545d14
 
 on:
   push:
     branches:
-<<<<<<< HEAD
-      - main  # main 브랜치에 push할 때 실행
-=======
       - main
->>>>>>> c0c3502c2ab305c1012e5b9d97f61c557d545d14
   pull_request:
     branches:
       - main
 
 jobs:
   build:
-<<<<<<< HEAD
-    name: Build Flutter APK
-    runs-on: ubuntu-latest  # Ubuntu 환경에서 실행
-=======
     name: Build Flutter iOS
     runs-on: macos-latest
->>>>>>> c0c3502c2ab305c1012e5b9d97f61c557d545d14
 
     steps:
       - name: 🔹 Checkout Repository
@@ -35,19 +22,6 @@ jobs:
         with:
           flutter-version: '3.16.0'
 
-<<<<<<< HEAD
-      - name: 🔹 Install dependencies
-        run: flutter pub get
-
-      - name: 🔹 Build APK
-        run: flutter build apk --release
-
-      - name: 🔹 Upload APK artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: flutter-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-=======
       - name: 🔹 Install Xcode dependencies
         run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
@@ -77,4 +51,3 @@ jobs:
         with:
           name: flutter-ios-app
           path: my_app/build/ios/iphoneos/*.app
->>>>>>> c0c3502c2ab305c1012e5b9d97f61c557d545d14
